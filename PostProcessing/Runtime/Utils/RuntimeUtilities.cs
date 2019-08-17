@@ -384,12 +384,14 @@ namespace UnityEngine.Rendering.PostProcessing
         internal static void UpdateResources(PostProcessResources resources)
         {
             Destroy(s_CopyMaterial);
-            Destroy(s_CopyStdMaterial);
+            //NS OPTIMIZATION
+//            Destroy(s_CopyStdMaterial);
             Destroy(s_CopyFromTexArrayMaterial);
             Destroy(s_CopyStdFromDoubleWideMaterial);
 
             s_CopyMaterial = null;
-            s_CopyStdMaterial = null;
+            //NS OPTIMIZATION
+//            s_CopyStdMaterial = null;
             s_CopyFromTexArrayMaterial = null;
             s_CopyStdFromDoubleWideMaterial = null;
 

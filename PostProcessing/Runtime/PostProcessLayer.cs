@@ -667,8 +667,16 @@ namespace UnityEngine.Rendering.PostProcessing
 
         public PostProcessBundle GetBundle(Type settingsType)
         {
-            Assert.IsTrue(m_Bundles.ContainsKey(settingsType), "Invalid type");
-            return m_Bundles[settingsType];
+            //NS OPTIMIZATION: Keeps from calling the dictionary twice
+//            Assert.IsTrue(m_Bundles.ContainsKey(settingsType), "Invalid type");
+//            return m_Bundles[settingsType];
+            PostProcessBundle outBundle = null;
+            if (!m_Bundles.TryGetValue(settingsType, out outBundle))
+            {
+                Debug.LogError("Invalid Type");
+            }
+
+            return outBundle;
         }
 
         /// <summary>
@@ -704,8 +712,12 @@ namespace UnityEngine.Rendering.PostProcessing
         internal void OverrideSettings(List<PostProcessEffectSettings> baseSettings, float interpFactor)
         {
             // Go through all settings & overriden parameters for the given volume and lerp values
-            foreach (var settings in baseSettings)
+            //foreach (var settings in baseSettings)
+            int settingsCount = baseSettings.Count;
+            for(int j=0;j<settingsCount;j++)
             {
+                PostProcessEffectSettings settings = baseSettings[j];
+                
                 if (!settings.active)
                     continue;
 

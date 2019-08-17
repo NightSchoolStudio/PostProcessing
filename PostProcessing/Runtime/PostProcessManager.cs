@@ -316,7 +316,8 @@ namespace UnityEngine.Rendering.PostProcessing
         internal void UpdateSettings(PostProcessLayer postProcessLayer, Camera camera)
         {
             // Reset to base state
-            ReplaceData(postProcessLayer);
+            //NS OPTIMIZATION: We don't need to revert to the base state, since we always have BasePostProcessingVolume
+            //ReplaceData(postProcessLayer);
 
             // If no trigger is set, only global volumes will have influence
             int mask = postProcessLayer.volumeLayer.value;

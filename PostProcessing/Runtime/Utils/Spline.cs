@@ -38,6 +38,8 @@ namespace UnityEngine.Rendering.PostProcessing
 
         // Used to track frame changes for data caching
         int frameCount = -1;
+        //NS OPTIMIZATION: We only want to cache splines once.
+        bool cached = false;
 
         /// <summary>
         /// An array holding pre-computed curve values.
@@ -55,6 +57,7 @@ namespace UnityEngine.Rendering.PostProcessing
         {
             Assert.IsNotNull(curve);
             this.curve = curve;
+            cached = false;
             m_ZeroValue = zeroValue;
             m_Loop = loop;
             m_Range = bounds.magnitude;
@@ -73,6 +76,10 @@ namespace UnityEngine.Rendering.PostProcessing
 
             // Only cache once per frame
             if (frame == frameCount)
+                return;
+
+            //NS OPTIMIZATION: Only cache once ever. We don't care about changing splines at runtime, or lerping them for that matter.
+            if (cached)
                 return;
 
             var length = curve.length;
@@ -95,6 +102,7 @@ namespace UnityEngine.Rendering.PostProcessing
                 cachedData[i] = Evaluate((float)i * k_Step, length);
 
             frameCount = Time.renderedFrameCount;
+            cached = true;
         }
 
         /// <summary>
