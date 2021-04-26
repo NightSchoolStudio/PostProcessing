@@ -769,8 +769,11 @@ namespace UnityEngine.Rendering.PostProcessing
         /// </summary>
         public void ResetHistory()
         {
-            foreach (var bundle in m_Bundles)
-                bundle.Value.ResetHistory();
+            if (m_Bundles != null)
+            {
+                foreach (var bundle in m_Bundles)
+                    bundle.Value.ResetHistory();
+            }
 
             temporalAntialiasing.ResetHistory();
         }
